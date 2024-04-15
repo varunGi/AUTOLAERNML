@@ -1,0 +1,45 @@
+<!-- unsupervised_modeling.html -->
+{% extends 'sidebar.html' %}
+
+{% block title %}  Data Modeling{% endblock %}
+
+{% block content %}
+<style>
+    /* Centering the content */
+    #content-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin-top: 10px;
+    }
+
+    /* Additional styling if needed */
+    form {
+        text-align: center;
+    }
+    form button {
+        display: inline-block;
+        margin-right: 10px;
+        padding: 10px;
+        background-color: #007bff; /* Blue color similar to Bootstrap primary */
+        color: #fff; /* White text color */
+        border: none;
+        cursor: pointer;
+    }
+</style>
+
+<div id="content-container">
+<div>
+<h2>Select the type of problem:</h2>
+    
+<form>
+    <a href="{{ url_for('supervised_modelling') }}" class="btn btn-primary">Supervised Learning</a>
+    <a href="{{ url_for('unsupervised_modelling') }}" class="btn btn-primary">Unsupervised Learning</a>
+        
+</form>
+
+
+</div>
+</div>
+{% endblock %}

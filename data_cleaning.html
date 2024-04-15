@@ -1,0 +1,88 @@
+{% extends "sidebar.html" %}
+
+{% block content %}
+
+<div class="text-center mt-3">
+    <div class="text-center mt-3">
+        <form method="POST">
+            {% with messages = get_flashed_messages(category_filter='success') %}
+                {% if messages %}
+                    <div id="flash-message" class="alert alert-success">
+                        {{ messages[0] }}
+                    </div>
+                {% endif %}
+            {% endwith %}
+            <label for="columns_to_remove">Select columns to remove:</label>
+            <select multiple class="form-control js-select2 col-md-6" name="columns_to_remove" id="columns_to_remove">
+                {% for column in columns %}
+                    <option value="{{ column }}">{{ column }}</option>
+                {% endfor %}
+            </select>
+            <br>
+            <br>
+            <button class="btn btn-primary" type="submit" name="remove_columns">Remove Columns</button>
+            <br>
+            <br>
+            <button class="btn btn-primary" type="submit" name="remove_duplicates">Remove Duplicates</button>
+            <br>
+            <br>
+            <button class="btn btn-primary" type="button" onclick="toggleFillOptions()">Fill Missing Values</button>
+
+            <!-- Hidden box for numeric and categoric options -->
+            <div id="fill-options-box" style="display: none;">
+                <!-- Numeric Method Select Box -->
+                <label for="method_numeric_missing">Numeric Method:</label>
+                <select class="form-control" name="method_numeric_missing" id="method_numeric_missing" onchange="toggleNumericConstantInput()">
+                    <option value="mean">Mean</option>
+                    <option value="median">Median</option>
+                    <option value="constant">Constant</option>
+                </select>
+                <br>
+                <!-- Numeric Constant Input Box -->
+                <input type="text" class="form-control" name="numeric_constant" id="numeric_constant" style="display: none;">
+
+                <br>
+
+                <!-- Categoric Method Select Box -->
+                <label for="method_categoric_missing">Categoric Method:</label>
+                <select class="form-control" name="method_categoric_missing" id="method_categoric_missing" onchange="toggleCategoricConstantInput()">
+                    <option value="mode">Mode</option>
+                    <option value="constant">Constant</option>
+                </select>
+                <br>
+                <!-- Categoric Constant Input Box -->
+                <input type="text" class="form-control" name="categoric_constant" id="categoric_constant" style="display: none;" placeholder="Enter the categoric constant">
+                
+                <button class="btn btn-primary" type="submit" name="fill_all_values">Fill Dataset</button>
+            </div>
+            <div class="text-center">
+                <br>
+                <a href="{{ url_for('data_profiling') }}" class="btn btn-primary">Next</a>
+            </div>
+        </form>
+        
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            $('.js-select2').select2();
+        });
+
+        function toggleFillOptions() {
+            var fillOptionsBox = document.getElementById('fill-options-box');
+            fillOptionsBox.style.display = fillOptionsBox.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function toggleNumericConstantInput() {
+            var numericMethodSelect = document.getElementById('method_numeric_missing');
+            var numericConstantInput = document.getElementById('numeric_constant');
+            numericConstantInput.style.display = numericMethodSelect.value === 'constant' ? 'block' : 'none';
+        }
+
+        function toggleCategoricConstantInput() {
+            var categoricMethodSelect = document.getElementById('method_categoric_missing');
+            var categoricConstantInput = document.getElementById('categoric_constant');
+            categoricConstantInput.style.display = categoricMethodSelect.value === 'constant' ? 'block' : 'none';
+        }
+    </script>
+{% endblock %}

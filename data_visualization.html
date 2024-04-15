@@ -1,0 +1,60 @@
+{% extends 'sidebar.html' %}
+
+{% block title %}Data Visualization Page{% endblock %}
+
+{% block content %}
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Visualization</title>
+    <!-- Include necessary JavaScript libraries -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pivottable/2.24.0/pivot.min.js"></script>
+</head>
+
+<div class="row">
+    <div class="col-md-12">
+        <h1 style="text-align: center;">Data Visualization</h1>
+    </div>
+    <!-- Your existing HTML code -->
+
+
+<div class="row">
+    <!-- <div class="card bg-black"> -->
+        <div class="ui container-fluid">
+            {{html_str | safe}}
+        </div>
+    <!-- </div> -->
+    </div>
+        <style>
+    .text{
+        width: 500px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .ui{ 
+            /* background-color: #ffff; */
+            color: rgb(6, 6, 6);
+            align-items: center;
+           
+            /* border: 1px solid;
+            border-radius: 12px; */
+            width:1500px; 
+            height:1000px;
+             margin-top: 50px;
+            margin-left: 70px;
+            margin-right: 50px;
+            padding-top: 20px;
+            padding-bottom: 10px; 
+           
+           
+    }
+    
+    
+</style>
+</html>
+
+{% endblock %}

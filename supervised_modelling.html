@@ -1,0 +1,136 @@
+{% extends 'sidebar.html' %}
+
+{% block title %}Supervised Modeling{% endblock %}
+
+{% block content %}
+<style>
+    /* Center the form */
+    form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh; /* Adjust the height as needed */
+    }
+
+    /* Add space between the button and the select dropdown */
+    #buttonContainer {
+        margin-top: 10px;
+    }
+</style>
+
+<form action="/supervised_modelling" method="post">
+    <label for="problem_type">Select Problem Type:</label>
+    <select id="problem_type" name="problem_type">
+        <option value=" "></option> 
+        <option value="regression">Regression</option>
+        <option value="classification">Classification</option>
+    </select>
+    <label for="target_column">Select Target Column:</label>
+    <div class="form-group">
+        <select id="target_column" name="target_column" onchange="updateSelectedTarget();">
+            {% for column in columns %}
+                <option value="{{ column }}">{{ column }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="test_size">Select Test Size:</label>
+        <input type="range" class="form-control-range" id="test_size" name="test_size" min="0.01" max="0.5" step="0.01" value="0.2">
+        <label for="test_size">Test Size: <span id="test_size_label">0.2</span></label>
+    </div>
+    <div class="form-group">
+        <label for="algorithms">Select Algorithms:</label>
+        <select multiple class="form-control" id="algorithms" name="algorithms">
+            <!-- Options will be dynamically updated using JavaScript -->
+        </select>
+    </div>
+    <div id="buttonContainer" >
+        <button type="button" onclick="runModels()" class="btn btn-primary">Run Models</button>
+    </div>
+    <div id="selectedAlgorithmsContainer"></div>
+
+    <div>
+        {{table_json | safe}} 
+    </div>
+</form>
+
+<div id="dataFrameContainer"></div>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+<script>
+    document.getElementById('test_size').addEventListener('input', function() {
+        document.getElementById('test_size_label').innerText = this.value;
+    });
+
+    document.getElementById('problem_type').addEventListener('change', function() {
+        document.getElementById('selected_problem_type').innerText = this.value;
+
+        var buttonContainer = document.getElementById('buttonContainer');
+        buttonContainer.style.display = this.value === 'classification' ? 'block' : 'none';
+    });
+
+    document.getElementById('target_column').addEventListener('change', function() {
+        document.getElementById('selected_target_column').innerText = this.value;
+    });
+    document.getElementById('problem_type').addEventListener('change', function() {
+        var problemType = this.value;
+        
+        var algorithmsSelect = document.getElementById('algorithms');
+        
+        algorithmsSelect.innerHTML = '';
+        
+        if (problemType === 'regression') {
+            addOptions(algorithmsSelect, ['Linear Regression', 'Polynomial Regression', 'Support Vector Regression', 'Decision Tree Regression', 'Random Forest Regression', 'Ridge Regression', 'Lasso Regression', 'Gaussian Regression', 'KNN Regression', 'AdaBoost']);
+        } else if (problemType === 'classification') {
+            addOptions(algorithmsSelect, ['Neural Networks', 'Quadratic Discriminant Analysis (QDA)', 'Adaptive Boosting (AdaBoost)', 'Gaussian Processes', 'Perceptron', 'KNN Classifier', 'Ridge Classifier', 'Passive Aggressive Classifier', 'Elastic Net', 'Lasso Regression']);
+        }
+    });
+
+    function addOptions(selectElement, options) {
+        options.forEach(function(option) {
+            var optionElement = document.createElement('option');
+            optionElement.value = option;
+            optionElement.text = option;
+            selectElement.appendChild(optionElement);
+        });
+    }
+    function runModels() {
+        var selectedAlgorithms = $('#algorithms').val();
+        $('#selectedAlgorithmsContainer').html('<p>Selected Algorithms: ' + selectedAlgorithms.join(', ') + '</p>');
+
+        // Send an AJAX request to update the table_json
+        $.ajax({
+            type: 'POST',
+            url: '/supervised_modelling',
+            data: $('#supervisedForm').serialize(),
+            success: function(response) {
+                // Update the table container with the new table_json
+                $('#tableContainer').html(response);
+            },
+            error: function(error) {
+                console.error('Error:', error);
+            }
+        });
+    }
+
+        // Send an AJAX request to update the table_json
+        $.ajax({
+            type: 'POST',
+            url: '/supervised_modelling',
+            data: $('#supervisedForm').serialize(),
+            success: function(response) {
+                // Update the table container with the new table_json
+                $('#tableContainer').html(response);
+            },
+            error: function(error) {
+                console.error('Error:', error);
+            }
+        });
+    
+
+    // Attach the runModels function to the click event of the button
+    $('#runModelsBtn').click(runModels);
+</script>
+
+{% endblock %}

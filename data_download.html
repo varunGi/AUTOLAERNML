@@ -1,0 +1,31 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Download</title>
+</head>
+<body>
+    <h1>Data Download</h1>
+    <a href="{{ url_for('data_download') }}">Download Data</a>
+
+    <h2>Download Models</h2>
+    <form action="{{ url_for('download_model', model_type='Regression', model_name='LR') }}">
+        <label for="model_type">Choose model type:</label>
+        <select name="model_type" id="model_type">
+            <option value="Regression">Regression</option>
+            <option value="Classification">Classification</option>
+            <option value="Clustering">Clustering</option>
+        </select>
+        
+        <label for="model_name">Choose model name:</label>
+        <select name="model_name" id="model_name">
+            <option value="LR">Linear Regression</option>
+            <!-- Add other model names here based on your available models -->
+        </select>
+        
+        <button type="submit">Download Model</button>
+    </form>
+</body>
+</html>

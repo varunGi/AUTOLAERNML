@@ -1,0 +1,38 @@
+{% extends 'sidebar.html' %}
+
+{% block title %}Profiling Page{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <h2 class="text-center mb-4">Exploratory Data Analysis</h2>
+
+        <!-- Horizontal layout for the profiling sections -->
+        <div class="d-flex flex-wrap">
+            <div class="col-md-6 mb-4">
+                {{ profiling_report['overview'] | safe }}
+            </div>
+
+            <!-- Include other profiling sections as needed -->
+
+        </div>
+
+        <!-- Center the button -->
+        <div class="text-center">
+            <button id="generateReportBtn" class="btn btn-primary mt-3">Generate Profiling Report</button>
+        </div>
+    </div>
+</div>
+<div class="text-center">
+    <br>
+    <a href="{{ url_for('data_visualization') }}" class="btn btn-primary">Next</a>
+</div>
+
+<script>
+    // JavaScript to open the new tab on button click
+    document.getElementById('generateReportBtn').addEventListener('click', function() {
+        window.open("{{ url_for('generate_profiling_report') }}", "_blank");
+    });
+</script>
+
+{% endblock %}
